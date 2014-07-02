@@ -75,7 +75,7 @@ def getArgs():
 		"--output",
 		type = str,
 		required = True,
-		help = """Output directory"""
+		help = """Output file prefix"""
 	)
 
 	return parser.parse_args()
