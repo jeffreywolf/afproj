@@ -146,19 +146,15 @@ def fit(X, y):
 
 def affine_parameterization(utm_e, utm_n, x, y):
 	X = np.column_stack((x, y, np.ones(len(x))))
-	#print X
 	affine x = fit(X, utm_e)
 	affine_y = fit(X, utm_n)
 	return affine_x, affine_y
 
 
 def affine_transformation(X_unprj, affine_x, affine_y, args, header):
-	# Affine transformation parameterized.
 	# Project unprojected points to UTM coordinate space
-
 	x_pred = np.dot(X_unprj, affine_x)
 	y_pred = np.dot(X_unprj, affine_y)
-	#print x_pred, y_pred
 	return x_pred, y_pred
 
 
