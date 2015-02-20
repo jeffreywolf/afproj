@@ -129,6 +129,16 @@ def getControl(path):
 	data = np.array(data, dtype=np.float64)
 	return data
 
+def update(line):
+	"""Convert uid or nsim column to integer
+	"""
+	if len(line)==5:
+		line[0]=int(line)
+		return line
+	else:
+		line[0]=int(line)
+		line[1]=int(line)
+		return line
 
 def writeOut(data, header, filename, verbose):
 	"""Write data to a file.
@@ -140,12 +150,14 @@ def writeOut(data, header, filename, verbose):
 		with open(filename, "w") as f:
 			header_str = ",".join(header)+"\n"
 			f.write(header_str)
-			for line in data: 
+			for line in data:
+				line = update(line)
 				row = ",".join([str(elem) for elem in line])+"\n"
 				f.write(row)
 	else:
 		with open(filename, "a") as f:
-			for line in data: 
+			for line in data:
+				line = update(line)
 				row = ",".join([str(elem) for elem in line])+"\n"
 				f.write(row)
 	if verbose:
@@ -192,7 +204,6 @@ def main():
 	if args.verbose:
 		print header, data
 
-
 	np.random.seed(10)
 
 	cp = getControl(args.controlPoints)
@@ -213,9 +224,8 @@ def main():
 				print "Cannot simulate error because no utm_e and utm_n se's" 
 				print  "are included in control points file."
 	else:
-		print "Incorrect dimensions for control points csv. Exiting"
+		print "Incorrect dimensions for control points csv. Exiting."
 		sys.exit(1)
-
 
 	# Affine Spatial Transformation Parameterization
 	# x' = Ax + By + C
