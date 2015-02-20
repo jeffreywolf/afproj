@@ -78,6 +78,13 @@ def getArgs():
 		help = """Output file prefix"""
 	)
 
+	parser.add_argument(
+		"-v",
+		"--verbose",
+		action = "store_true",
+		help = "Print status updates while executing"
+	)
+
 	return parser.parse_args()
 
 def getIndex(header, item):
