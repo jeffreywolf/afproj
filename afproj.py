@@ -190,7 +190,8 @@ def main():
 	]
 
 	header, data = getData(args.unprojectPoints, fields)
-	print header, data
+	if args.verbose:
+		print header, data
 
 
 	np.random.seed(10)
@@ -201,17 +202,19 @@ def main():
 
 	if cp.shape[1] == 6 and args.nsims is not None:
 		sim = True
-		print "Will simulate {} realizations of corners.".format(args.nsims)
+		if args.verbose:
+			print "Will simulate {} realizations of corners.".format(args.nsims)
 	elif args.nsims is None:
 		sim = False
 	elif cp.shape[1] == 4:
 		sim = False
 		if args.nsims is not None:
-			print "Cannot simulate error because no utm_e and utm_n se's" 
-			print  "are included in control points file."
+			if args.verbose:
+				print "Cannot simulate error because no utm_e and utm_n se's" 
+				print  "are included in control points file."
 	else:
-		print "Incorrect dimensions for control points csv."
-		raise Exception 
+		print "Incorrect dimensions for control points csv. Exiting"
+		sys.exit(1)
 
 
 	# Affine Spatial Transformation Parameterization
@@ -242,7 +245,7 @@ def main():
 	)
 
 	projected_data_header = ["uid", "gx", "gy", "x_pred", "y_pred"]
-	writeOut(projected_data, projected_data_header, args.output+"-projected.csv") # data, header, filename
+	writeOut(projected_data, projected_data_header, args.output+"-projected.csv", args.verbose) # data, header, filename
 
 	
 	# Simulated locations
@@ -252,7 +255,8 @@ def main():
 		utm_se_n = cp[:,5]
 		sim_data_header = ["iter", "uid", "gx", "gy", "x_pred", "y_pred"]
 		for i in range(int(args.nsims)):
-			print "Simulation number {}".format(i+1)
+			if args.verbose:
+				print "Simulation number {}".format(i+1)
 			evec = np.zeros(cp.shape[0])
 			nvec = np.zeros(cp.shape[0])
 			for j, row in enumerate(cp):
@@ -272,11 +276,12 @@ def main():
 				)
 			)
 			if i == 0:
-				writeOut(sim_data, sim_data_header, args.output+"-sim.csv") # data, header, filename
+				writeOut(sim_data, sim_data_header, args.output+"-sim.csv", args.verbose) # data, header, filename
 			else:
-				writeOut(sim_data, None, args.output+"-sim.csv") # data, header, filename
+				writeOut(sim_data, None, args.output+"-sim.csv", args.verbose) # data, header, filename
 	t_f = time.time()
-	print "Spatially adjusted data in {} seconds".format(t_f - t_i)
+	if args.verbose:
+		print "Spatially adjusted data in {} seconds".format(t_f - t_i)
 
 
 if __name__ == "__main__":
