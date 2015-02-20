@@ -131,11 +131,12 @@ def getControl(path):
 	return data
 
 
-def writeOut(data, header, filename):
+def writeOut(data, header, filename, verbose):
 	"""Write data to a file.
 	"""
 	if header is not None:
-		print "\nInitializing {0} file output".format(filename)	
+		if verbose:
+			print "\nInitializing {0} file output".format(filename)	
 		with open(filename, "w") as f:
 			header_str = ",".join(header)+"\n"
 			f.write(header_str)
@@ -143,12 +144,14 @@ def writeOut(data, header, filename):
 				row = ",".join([str(elem) for elem in line])+"\n"
 				f.write(row)
 	else:
-		print "\nInitializing {0} file output".format(filename)	
+		if verbose:
+			print "\nInitializing {0} file output".format(filename)	
 		with open(filename, "a") as f:
 			for line in data: 
 				row = ",".join([str(elem) for elem in line])+"\n"
 				f.write(row)
-	print "Wrote {0} to disk\n".format(filename)
+	if verbose:
+		print "Wrote {0} to disk\n".format(filename)
 
 def fit(X, y):
 	"""Fit using matrix algebra
