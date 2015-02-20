@@ -125,6 +125,8 @@ def getControl(path):
 
 
 def writeOut(data, header, filename):
+	"""Write data to a file.
+	"""
 	if header is not None:
 		print "\nInitializing {0} file output".format(filename)	
 		with open(filename, "w") as f:
