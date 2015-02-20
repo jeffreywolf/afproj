@@ -141,21 +141,14 @@ def fit(X, y):
 	XTXinv = inv(np.dot(X.T, X))
 	XTy = np.dot(X.T, y)
 	B = np.dot(XTXinv, XTy)
+	return B
 
 
 def affine_parameterization(utm_e, utm_n, x, y):
 	X = np.column_stack((x, y, np.ones(len(x))))
 	#print X
-	affine_x = linear_model.LinearRegression().fit(X, utm_e)
-	affine_y = linear_model.LinearRegression().fit(X, utm_n)
-	print affine_x.score(X, utm_e)
-	print affine_x.coef_
-	#print affine_x.get_params()
-	print np.sqrt(mean_squared_error(utm_e, affine_x.predict(X)))
-	print affine_y.score(X, utm_n)
-	print affine_y.coef_
-	#print affine_y.get_params()
-	print np.sqrt(mean_squared_error(utm_n, affine_y.predict(X)))
+	affine x = fit(X, utm_e)
+	affine_y = fit(X, utm_n)
 	return affine_x, affine_y
 
 
