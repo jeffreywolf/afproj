@@ -90,9 +90,6 @@ def getData(path, fields):
 				indices = [getIndex(header, item) for item in fields]
 				continue
 			row = [line[index] for index in indices]
-			if 'NA' in row:
-				for j, elem in enumerate(row):
-					row[j] = np.nan
 			data.append(row)
 	data = np.array(data, dtype = np.float64)
 	header = [header[index] for index in indices]
