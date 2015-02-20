@@ -134,9 +134,10 @@ def getControl(path):
 def writeOut(data, header, filename, verbose):
 	"""Write data to a file.
 	"""
+	if verbose:
+		print "\nInitializing {0} file output".format(filename)		
 	if header is not None:
-		if verbose:
-			print "\nInitializing {0} file output".format(filename)	
+
 		with open(filename, "w") as f:
 			header_str = ",".join(header)+"\n"
 			f.write(header_str)
@@ -144,8 +145,6 @@ def writeOut(data, header, filename, verbose):
 				row = ",".join([str(elem) for elem in line])+"\n"
 				f.write(row)
 	else:
-		if verbose:
-			print "\nInitializing {0} file output".format(filename)	
 		with open(filename, "a") as f:
 			for line in data: 
 				row = ",".join([str(elem) for elem in line])+"\n"
