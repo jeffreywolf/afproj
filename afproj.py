@@ -196,8 +196,9 @@ def main():
 	np.random.seed(10)
 
 	cp = getControl(args.controlPoints)
-	print cp
-	print cp.shape
+	if args.verbose:
+		print cp
+		print cp.shape
 
 	if cp.shape[1] == 6 and args.nsims is not None:
 		sim = True
@@ -220,7 +221,7 @@ def main():
 	# x' = Ax + By + C
 	# y' = Dx + Ey + F
 	utm_e, utm_n, x, y = cp[:,0], cp[:,1], cp[:,2], cp[:,3]
-	affine_x, affine_y = affine_parameterization(utm_e, utm_n, x, y ) # utm_e, utm_n, x, y
+	affine_x, affine_y = affine_parameterization(utm_e, utm_n, x, y )
 
 	uids = data[:, getIndex(header, args.uid)]
 	gx = data[:, getIndex(header, args.xname)]
