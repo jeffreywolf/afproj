@@ -103,10 +103,11 @@ def getControl(path):
 		for i, line in enumerate(f):
 			ls = line.strip().split(',')
 			if i == 0:
+				header = ls
 				continue
 			data.append(ls)
 	data = np.array(data, dtype = np.float64)
-	return data
+	return header, data
 
 def update(line):
 	"""Convert uid or nsim column to integer
@@ -182,7 +183,7 @@ def main():
 	np.random.seed(10)
 
 	header, data = getData(args.unprojectPoints, fields)
-	cp = getControl(args.controlPoints)
+	cp_header, cp = getControl(args.controlPoints)
 
 	# Determine whether or not to run simulation
 	if cp.shape[1] == 6 and args.nsims is not None:
@@ -230,7 +231,7 @@ def main():
 		)
 	)
 
-	projected_data_header = ["uid", "gx", "gy", "x_pred", "y_pred"]
+	projected_data_header = ["uid", "gx", "gy", cp_header[0], cp_header[1]]
 	writeOut(
 		projected_data, 
 		projected_data_header, 
@@ -242,7 +243,7 @@ def main():
 	if sim:
 		utm_se_e = cp[:,4]
 		utm_se_n = cp[:,5]
-		sim_data_header = ["iter", "uid", "gx", "gy", "x_pred", "y_pred"]
+		sim_data_header = ["iter", "uid", "gx", "gy", cp_header[0], cp_header[1]]
 		for i in range(int(args.nsims)):
 			if args.verbose:
 				print "Simulation number {}".format(i+1)
