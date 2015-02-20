@@ -87,15 +87,15 @@ def getData(path, fields):
 		for i, line in enumerate(indata):
 			if i == 0:
 				header = line
+				indices = [getIndex(header, item) for item in fields]
 				continue
-			if 'NA' in line:
-				for j, elem in enumerate(line):
-					line[j] = np.nan
-			data.append(line)
+			row = [line[index] for index in indices]
+			if 'NA' in row:
+				for j, elem in enumerate(row):
+					row[j] = np.nan
+			data.append(row)
 	data = np.array(data, dtype = np.float64)
-	indices = np.array([getIndex(header, item) for item in fields])
-	header = [header[i] for i in indices]
-	data = data[:, indices]
+	header = [header[index] for index in indices]
 	return header, data
 
 def getControl(path):
