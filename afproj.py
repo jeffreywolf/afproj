@@ -138,6 +138,8 @@ def writeOut(data, header, filename):
 	print "Wrote {0} to disk\n".format(filename)
 
 def fit(X, y):
+	"""Fit using matrix algebra
+	"""
 	XTXinv = inv(np.dot(X.T, X))
 	XTy = np.dot(X.T, y)
 	B = np.dot(XTXinv, XTy)
