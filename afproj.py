@@ -114,13 +114,10 @@ def getControl(path):
 def update(line):
 	"""Convert uid or nsim column to integer
 	"""
-	if len(line)==5:
-		line[0]=int(line)
-		return line
-	else:
-		line[0]=int(line)
-		line[1]=int(line)
-		return line
+	line[0]=int(line[0])
+	if len(line)==6:
+		line[1]=int(line[1])
+	return line
 
 def writeOut(data, header, filename, verbose):
 	"""Write data to a file.
