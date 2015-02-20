@@ -1,24 +1,14 @@
 #! /usr/bin/env python
 """
-Spatial adjust and test precision
-
-
+Affine spatial transformation
 """
-
 import numpy as np
-
-from sklearn import linear_model
-from sklearn import cross_validation
-from sklearn.metrics import explained_variance_score
-from sklearn.metrics import mean_squared_error
 import argparse, sys, csv, os, time
-
 
 def getArgs():
 	parser = argparse.ArgumentParser(
-		description = """Affine spatial transformation with simulated error"""
+		description = """Affine spatial transformation"""
 	)
-
 	parser.add_argument(
 		"-c",
 		"--controlPoints",
@@ -26,7 +16,6 @@ def getArgs():
 		required = True,
 		help = "Control points csv file. See README doc for formating instructions."
 	)
-
 	parser.add_argument(
 		"-u",
 		"--unprojectPoints",
@@ -34,7 +23,6 @@ def getArgs():
 		required = True,
 		help = "Unprojected points on plot coordinate system"
 	)
-
 	parser.add_argument(
 		"-x",
 		"--xname",
@@ -43,7 +31,6 @@ def getArgs():
 		help = "field name for x-coordinate in unprojected points file"
 
 	)
-
 	parser.add_argument(
 		"-y",
 		"--yname",
@@ -52,7 +39,6 @@ def getArgs():
 		help = "field name for y-coordinate in unprojected points file"
 
 	)	
-
 	parser.add_argument(
 		"-i",
 		"--uid",
@@ -61,7 +47,6 @@ def getArgs():
 		help = "field name for unique identifier of point in unprojected points file"
 
 	)
-
 	parser.add_argument(
 		"-n",
 		"--nsims",
@@ -69,7 +54,6 @@ def getArgs():
 		required = False,
 		help = """Number of simulations"""
 	)
-
 	parser.add_argument(
 		"-o",
 		"--output",
@@ -77,14 +61,12 @@ def getArgs():
 		required = True,
 		help = """Output file prefix"""
 	)
-
 	parser.add_argument(
 		"-v",
 		"--verbose",
 		action = "store_true",
 		help = "Print status updates while executing"
 	)
-
 	return parser.parse_args()
 
 def getIndex(header, item):
@@ -94,7 +76,6 @@ def getIndex(header, item):
 		if elem.lower() == item.lower():
 			return i
 	return None
-
 
 def getData(path, fields):
 	"""Read unprojected points file as numpy array"""
@@ -110,7 +91,7 @@ def getData(path, fields):
 				for j, elem in enumerate(line):
 					line[j] = np.nan
 			data.append(line)
-	data = np.array(data, dtype=np.float64)
+	data = np.array(data, dtype = np.float64)
 	indices = np.array([getIndex(header, item) for item in fields])
 	header = [header[i] for i in indices]
 	data = data[:, indices]
@@ -126,7 +107,7 @@ def getControl(path):
 			if i == 0:
 				continue
 			data.append(ls)
-	data = np.array(data, dtype=np.float64)
+	data = np.array(data, dtype = np.float64)
 	return data
 
 def update(line):
@@ -171,7 +152,6 @@ def fit(X, y):
 	B = np.dot(XTXinv, XTy)
 	return B
 
-
 def affine_parameterization(utm_e, utm_n, x, y):
 	"""Parameterize affine function
 	"""
@@ -180,14 +160,12 @@ def affine_parameterization(utm_e, utm_n, x, y):
 	affine_y = fit(X, utm_n)
 	return affine_x, affine_y
 
-
 def affine_transformation(X_unprj, affine_x, affine_y, args, header):
 	"""Predict with affine function
 	"""
 	x_pred = np.dot(X_unprj, affine_x)
 	y_pred = np.dot(X_unprj, affine_y)
 	return x_pred, y_pred
-
 
 def main():
 	t_i = time.time()
@@ -200,10 +178,9 @@ def main():
 		args.yname
 	]
 
-	header, data = getData(args.unprojectPoints, fields)
-
 	np.random.seed(10)
 
+	header, data = getData(args.unprojectPoints, fields)
 	cp = getControl(args.controlPoints)
 
 	# Determine whether or not to run simulation
