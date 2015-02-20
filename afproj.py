@@ -211,8 +211,6 @@ def main():
 	uids = data[:, getIndex(header, args.uid)].flatten()
 	gx = data[:, getIndex(header, args.xname)].flatten()
 	gy = data[:, getIndex(header, args.yname)].flatten()
-	print gx
-	print gy
 	X_unprj = np.column_stack(
 		(
 			gx,
@@ -236,11 +234,10 @@ def main():
 	writeOut(
 		projected_data, 
 		projected_data_header, 
-		args.output+"-projected.csv", 
+		args.output+".csv", 
 		args.verbose
 	)
 
-	
 	# Simulated locations
 	if sim:
 		utm_se_e = cp[:,4]
