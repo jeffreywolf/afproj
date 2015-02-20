@@ -137,8 +137,14 @@ def writeOut(data, header, filename):
 				f.write(row)
 	print "Wrote {0} to disk\n".format(filename)
 
+def fit(X, y):
+	XTXinv = inv(np.dot(X.T, X))
+	XTy = np.dot(X.T, y)
+	B = np.dot(XTXinv, XTy)
+
+
 def affine_parameterization(utm_e, utm_n, x, y):
-	X = np.column_stack((x, y))
+	X = np.column_stack((x, y, np.ones(len(x))))
 	#print X
 	affine_x = linear_model.LinearRegression().fit(X, utm_e)
 	affine_y = linear_model.LinearRegression().fit(X, utm_n)
