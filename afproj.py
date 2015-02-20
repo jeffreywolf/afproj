@@ -81,6 +81,8 @@ def getArgs():
 	return parser.parse_args()
 
 def getIndex(header, item):
+	"""Get index of variable
+	"""
 	for i, elem in enumerate(header):
 		if elem.lower() == item.lower():
 			return i
@@ -88,7 +90,7 @@ def getIndex(header, item):
 
 
 def getData(path, fields):
-	""" reads in a CSV file and returns data table for analysis """
+	"""Read unprojected points file as numpy array"""
 	data = []
 	with open(path, 'rUb') as f:
 		indata = csv.reader(f)
@@ -109,6 +111,8 @@ def getData(path, fields):
 	return header, data
 
 def getControl(path):
+	"""Read control points file as numpy array
+	"""
 	data = []
 	with open(path, "rU") as f:
 		for i, line in enumerate(f):
@@ -202,11 +206,9 @@ def main():
 	# Affine Spatial Transformation Parameterization
 	# x' = Ax + By + C
 	# y' = Dx + Ey + F
-	#print cp[:,0:4]
 	utm_e, utm_n, x, y = cp[:,0], cp[:,1], cp[:,2], cp[:,3]
 	affine_x, affine_y = affine_parameterization(utm_e, utm_n, x, y ) # utm_e, utm_n, x, y
 
-	# data, affine_x, affine_y, args, header 
 	uids = data[:, getIndex(header, args.uid)]
 	gx = data[:, getIndex(header, args.xname)]
 	gy = data[:, getIndex(header, args.yname)]
