@@ -156,8 +156,8 @@ def affine_transformation(X_unprj, affine_x, affine_y, args, header):
 	# Affine transformation parameterized.
 	# Project unprojected points to UTM coordinate space
 
-	x_pred = affine_x.predict(X_unprj)
-	y_pred = affine_y.predict(X_unprj)
+	x_pred = np.dot(X_unprj, affine_x)
+	y_pred = np.dot(X_unprj, affine_y)
 	#print x_pred, y_pred
 	return x_pred, y_pred
 
