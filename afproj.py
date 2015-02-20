@@ -155,8 +155,14 @@ def fit(X, y):
 def affine_parameterization(utm_e, utm_n, x, y):
 	"""Parameterize affine function
 	"""
-	X = np.column_stack((x, y, np.ones(len(x))))
-	affine x = fit(X, utm_e)
+	X = np.column_stack(
+		(
+			x, 
+			y, 
+			np.ones(len(x))
+		)
+	)
+	affine_x = fit(X, utm_e)
 	affine_y = fit(X, utm_n)
 	return affine_x, affine_y
 
