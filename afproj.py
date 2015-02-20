@@ -145,6 +145,8 @@ def fit(X, y):
 
 
 def affine_parameterization(utm_e, utm_n, x, y):
+	"""Parameterize affine function
+	"""
 	X = np.column_stack((x, y, np.ones(len(x))))
 	affine x = fit(X, utm_e)
 	affine_y = fit(X, utm_n)
@@ -152,7 +154,8 @@ def affine_parameterization(utm_e, utm_n, x, y):
 
 
 def affine_transformation(X_unprj, affine_x, affine_y, args, header):
-	# Project unprojected points to UTM coordinate space
+	"""Predict with affine function
+	"""
 	x_pred = np.dot(X_unprj, affine_x)
 	y_pred = np.dot(X_unprj, affine_y)
 	return x_pred, y_pred
