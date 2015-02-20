@@ -163,7 +163,7 @@ def affine_transformation(X_unprj, affine_x, affine_y, args, header):
 	return x_pred, y_pred
 
 
-if __name__ == "__main__":
+def main():
 	t_i = time.time()
 	args = getArgs()
 	initDir = os.getcwd()
@@ -264,3 +264,7 @@ if __name__ == "__main__":
 				writeOut(sim_data, None, args.output+"-sim.csv") # data, header, filename
 	t_f = time.time()
 	print "Spatially adjusted data in {} seconds".format(t_f - t_i)
+
+
+if __name__ == "__main__":
+	main()
