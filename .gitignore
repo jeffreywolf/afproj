@@ -2,3 +2,7 @@
 .DS_Store
 .Trashes
 .Spotlight-V100
+
+# Folders to ignore
+input
+output
