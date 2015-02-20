@@ -111,7 +111,6 @@ def getData(path, fields):
 					line[j] = np.nan
 			data.append(line)
 	data = np.array(data, dtype=np.float64)
-	#print header
 	indices = np.array([getIndex(header, item) for item in fields])
 	header = [header[i] for i in indices]
 	data = data[:, indices]
