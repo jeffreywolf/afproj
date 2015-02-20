@@ -201,16 +201,12 @@ def main():
 	]
 
 	header, data = getData(args.unprojectPoints, fields)
-	if args.verbose:
-		print header, data
 
 	np.random.seed(10)
 
 	cp = getControl(args.controlPoints)
-	if args.verbose:
-		print cp
-		print cp.shape
 
+	# Determine whether or not to run simulation
 	if cp.shape[1] == 6 and args.nsims is not None:
 		sim = True
 		if args.verbose:
@@ -224,22 +220,24 @@ def main():
 				print "Cannot simulate error because no utm_e and utm_n se's" 
 				print  "are included in control points file."
 	else:
-		print "Incorrect dimensions for control points csv. Exiting."
+		print "Incorrect dimensions for control points file. Exiting."
 		sys.exit(1)
 
 	# Affine Spatial Transformation Parameterization
 	# x' = Ax + By + C
 	# y' = Dx + Ey + F
-	utm_e, utm_n, x, y = cp[:,0], cp[:,1], cp[:,2], cp[:,3]
+	utm_e, utm_n = cp[:,0].flatten(), cp[:,1].flatten()
+	x, y = cp[:,2].flatten(), cp[:,3].flatten()
 	affine_x, affine_y = affine_parameterization(utm_e, utm_n, x, y )
 
-	uids = data[:, getIndex(header, args.uid)]
-	gx = data[:, getIndex(header, args.xname)]
-	gy = data[:, getIndex(header, args.yname)]
+	uids = data[:, getIndex(header, args.uid)].flatten()
+	gx = data[:, getIndex(header, args.xname)].flatten()
+	gy = data[:, getIndex(header, args.yname)].flatten()
 	X_unprj = np.column_stack(
 		(
 			gx,
-			gy
+			gy,
+			np.ones(gx)
 		)
 	)
 	x_pred, y_pred = affine_transformation(X_unprj, affine_x, affine_y, args, header) 
