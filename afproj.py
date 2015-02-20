@@ -98,7 +98,8 @@ def getData(path, fields):
 				header = line
 				continue
 			if 'NA' in line:
-				continue # remove lines with NA's
+				for j, elem in enumerate(line):
+					line[j] = np.nan
 			data.append(line)
 	data = np.array(data, dtype=np.float64)
 	#print header
