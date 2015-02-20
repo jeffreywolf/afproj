@@ -3,6 +3,7 @@
 Affine spatial transformation
 """
 import numpy as np
+from numpy.linalg import inv
 import argparse, sys, csv, os, time
 
 def getArgs():
@@ -216,11 +217,13 @@ def main():
 	uids = data[:, getIndex(header, args.uid)].flatten()
 	gx = data[:, getIndex(header, args.xname)].flatten()
 	gy = data[:, getIndex(header, args.yname)].flatten()
+	print gx
+	print gy
 	X_unprj = np.column_stack(
 		(
 			gx,
 			gy,
-			np.ones(gx)
+			np.ones(len(gx))
 		)
 	)
 	x_pred, y_pred = affine_transformation(X_unprj, affine_x, affine_y, args, header) 
@@ -236,12 +239,16 @@ def main():
 	)
 
 	projected_data_header = ["uid", "gx", "gy", "x_pred", "y_pred"]
-	writeOut(projected_data, projected_data_header, args.output+"-projected.csv", args.verbose) # data, header, filename
+	writeOut(
+		projected_data, 
+		projected_data_header, 
+		args.output+"-projected.csv", 
+		args.verbose
+	)
 
 	
 	# Simulated locations
 	if sim:
-		# error cols 4 and 5 from cp csv
 		utm_se_e = cp[:,4]
 		utm_se_n = cp[:,5]
 		sim_data_header = ["iter", "uid", "gx", "gy", "x_pred", "y_pred"]
@@ -254,7 +261,13 @@ def main():
 				evec[j] = np.random.normal(row[0],row[4], 1)
 				nvec[j] = np.random.normal(row[1],row[5], 1)
 			affine_x, affine_y = affine_parameterization(evec, nvec, x, y)
-			x_pred, y_pred = affine_transformation(X_unprj, affine_x, affine_y, args, header)			
+			x_pred, y_pred = affine_transformation(
+				X_unprj, 
+				affine_x, 
+				affine_y, 
+				args, 
+				header
+			)			
 			iteration = i + np.zeros(x_pred.shape[0])
 			sim_data = np.column_stack(
 				(
@@ -267,9 +280,19 @@ def main():
 				)
 			)
 			if i == 0:
-				writeOut(sim_data, sim_data_header, args.output+"-sim.csv", args.verbose) # data, header, filename
+				writeOut(
+					sim_data, 
+					sim_data_header, 
+					args.output+"-sim.csv", 
+					args.verbose
+				)
 			else:
-				writeOut(sim_data, None, args.output+"-sim.csv", args.verbose) # data, header, filename
+				writeOut(
+					sim_data, 
+					None, 
+					args.output+"-sim.csv", 
+					args.verbose
+				) 
 	t_f = time.time()
 	if args.verbose:
 		print "Spatially adjusted data in {} seconds".format(t_f - t_i)
