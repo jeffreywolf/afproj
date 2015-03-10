@@ -6,3 +6,6 @@
 # Folders to ignore
 input
 output
+
+# ignore compiled python files
+*.pyc
